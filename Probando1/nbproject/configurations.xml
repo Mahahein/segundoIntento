@@ -4,6 +4,11 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>Bloque.h</itemPath>
+      <itemPath>Nodo.h</itemPath>
+      <itemPath>Objeto.h</itemPath>
+      <itemPath>Pivote.h</itemPath>
+      <itemPath>Saco.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -12,6 +17,11 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>Bloque.cpp</itemPath>
+      <itemPath>Nodo.cpp</itemPath>
+      <itemPath>Objeto.cpp</itemPath>
+      <itemPath>Pivote.cpp</itemPath>
+      <itemPath>Saco.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -36,6 +46,26 @@
       </toolsSet>
       <compileType>
       </compileType>
+      <item path="Bloque.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Bloque.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Nodo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Nodo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Objeto.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Objeto.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Pivote.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Pivote.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Saco.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Saco.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>
@@ -59,6 +89,26 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Bloque.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Bloque.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Nodo.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Nodo.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Objeto.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Objeto.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Pivote.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Pivote.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Saco.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Saco.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
       </item>
     </conf>

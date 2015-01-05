@@ -35,6 +35,11 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/Bloque.o \
+	${OBJECTDIR}/Nodo.o \
+	${OBJECTDIR}/Objeto.o \
+	${OBJECTDIR}/Pivote.o \
+	${OBJECTDIR}/Saco.o \
 	${OBJECTDIR}/main.o
 
 
@@ -61,6 +66,31 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probando1.exe: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/probando1 ${OBJECTFILES} ${LDLIBSOPTIONS}
+
+${OBJECTDIR}/Bloque.o: Bloque.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Bloque.o Bloque.cpp
+
+${OBJECTDIR}/Nodo.o: Nodo.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Nodo.o Nodo.cpp
+
+${OBJECTDIR}/Objeto.o: Objeto.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Objeto.o Objeto.cpp
+
+${OBJECTDIR}/Pivote.o: Pivote.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Pivote.o Pivote.cpp
+
+${OBJECTDIR}/Saco.o: Saco.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Saco.o Saco.cpp
 
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
