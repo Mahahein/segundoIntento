@@ -6,6 +6,7 @@
  */
 
 #include "Nodo.h"
+#include "Bloque.h"
 
 Nodo::Nodo() {
 }
@@ -14,14 +15,9 @@ Nodo::Nodo(const Nodo& orig) {
 }
 
 Nodo::Nodo(Bloque& bloq){
-    this->block = bloq;
+    this->block = &bloq;
 }
 
 Nodo::~Nodo() {
-}
-
-Nodo::Nodo(Bloque& bloq, Objeto& ob){
-    this->block = bloq;
-    this->centro = ob;
 }
 

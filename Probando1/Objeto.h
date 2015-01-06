@@ -19,7 +19,7 @@ public:
     Objeto(const Objeto& orig);
     Objeto(int pezo);
     virtual ~Objeto();
-    poneValor(double val);
+    void poneValor(double val);
 private:
 
 };

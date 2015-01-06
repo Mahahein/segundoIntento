@@ -7,6 +7,7 @@
 
 #ifndef NODO_H
 #define	NODO_H
+#include "Bloque.h"
 
 class Nodo {
 public:

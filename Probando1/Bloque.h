@@ -8,6 +8,7 @@
 #ifndef BLOQUE_H
 #define	BLOQUE_H
 #include <vector>
+#include "Objeto.h"
 using namespace std;
 
 class Bloque {
@@ -20,7 +21,7 @@ public:
     Objeto *centro;
     Bloque();
     Bloque(const Bloque& orig);
-    Bloque(int id, int n_objs, int rad, int tam, Objeto &ob);
+    Bloque(int id, int n_objs, int rad, int tam, Objeto& ob);
     virtual ~Bloque();
 private:
 

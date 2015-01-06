@@ -7,6 +7,7 @@
 
 #ifndef PIVOTE_H
 #define	PIVOTE_H
+#include "Objeto.h"
 
 class Pivote {
 public:

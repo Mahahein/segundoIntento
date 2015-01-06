@@ -6,6 +6,7 @@
  */
 
 #include "Pivote.h"
+#include "Objeto.h"
 
 Pivote::Pivote() {
 }
@@ -17,6 +18,6 @@ Pivote::~Pivote() {
 }
 
 Pivote::Pivote(Objeto& ob, double r){
-    this->centro = ob;
+    this->centro = &ob;
     this->radio = r;
 }

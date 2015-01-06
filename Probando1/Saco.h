@@ -9,15 +9,16 @@
 #define	SACO_H
 #include <vector>
 #include <string>
+#include "Objeto.h"
 using namespace std;
 
 class Saco {
 public:
-    vector<Objeto> bolsa;
+    vector<Objeto*> bolsa;
     Saco();
     Saco(const Saco& orig);
     virtual ~Saco();
-    leer(string archivo);
+    void leer(string archivo);
 private:
 
 };

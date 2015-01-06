@@ -8,6 +8,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include "Saco.h"
+
 using namespace std;
 
 /*
@@ -15,8 +17,9 @@ using namespace std;
  */
 int main(int argc, char** argv) {
 
-    
-    cout << "Hola Mundo" << endl;
+    Saco s;
+    s.leer("vector.txt");
+    //cout << "Hola Mundo" << endl;
     
     return 0;
 }

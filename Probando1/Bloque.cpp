@@ -6,6 +6,7 @@
  */
 
 #include "Bloque.h"
+#include "Objeto.h"
 
 Bloque::Bloque() {
 }
@@ -18,7 +19,7 @@ Bloque::Bloque(int id, int n_objs, int rad, int tam, Objeto& ob){
     n_objetos = n_objs;
     radio = rad;
     tamanio = tam;
-    this->centro = ob;
+    this->centro = &ob;
 }
 
 Bloque::~Bloque() {

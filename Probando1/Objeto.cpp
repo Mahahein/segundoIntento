@@ -22,7 +22,7 @@ Objeto::Objeto(int pezo){
 Objeto::~Objeto() {
 }
 
-Objeto::poneValor(double val){
+void Objeto::poneValor(double val){
     valores.push_back(val);
 }
 
