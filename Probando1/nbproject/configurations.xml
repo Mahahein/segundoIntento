@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="94">
+<configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
@@ -40,7 +40,7 @@
   <confs>
     <conf name="Debug" type="1">
       <toolsSet>
-        <compilerSet>default</compilerSet>
+        <compilerSet>GNU|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
         <rebuildPropChanged>false</rebuildPropChanged>
       </toolsSet>
@@ -78,9 +78,11 @@
       <compileType>
         <cTool>
           <developmentMode>5</developmentMode>
+          <commandlineTool>gcc</commandlineTool>
         </cTool>
         <ccTool>
           <developmentMode>5</developmentMode>
+          <commandlineTool>g++</commandlineTool>
         </ccTool>
         <fortranCompilerTool>
           <developmentMode>5</developmentMode>

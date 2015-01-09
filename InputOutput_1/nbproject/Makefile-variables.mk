@@ -9,19 +9,19 @@ CND_DISTDIR=dist
 # Debug configuration
 CND_PLATFORM_Debug=GNU-Linux-x86
 CND_ARTIFACT_DIR_Debug=dist/Debug/GNU-Linux-x86
-CND_ARTIFACT_NAME_Debug=probando1
-CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/probando1
+CND_ARTIFACT_NAME_Debug=inputoutput_1
+CND_ARTIFACT_PATH_Debug=dist/Debug/GNU-Linux-x86/inputoutput_1
 CND_PACKAGE_DIR_Debug=dist/Debug/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Debug=probando1.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/probando1.tar
+CND_PACKAGE_NAME_Debug=inputoutput1.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/GNU-Linux-x86/package/inputoutput1.tar
 # Release configuration
 CND_PLATFORM_Release=GNU-Linux-x86
 CND_ARTIFACT_DIR_Release=dist/Release/GNU-Linux-x86
-CND_ARTIFACT_NAME_Release=probando1
-CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/probando1
+CND_ARTIFACT_NAME_Release=inputoutput_1
+CND_ARTIFACT_PATH_Release=dist/Release/GNU-Linux-x86/inputoutput_1
 CND_PACKAGE_DIR_Release=dist/Release/GNU-Linux-x86/package
-CND_PACKAGE_NAME_Release=probando1.tar
-CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/probando1.tar
+CND_PACKAGE_NAME_Release=inputoutput1.tar
+CND_PACKAGE_PATH_Release=dist/Release/GNU-Linux-x86/package/inputoutput1.tar
 #
 # include compiler specific variables
 #
