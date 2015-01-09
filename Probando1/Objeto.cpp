@@ -26,3 +26,14 @@ void Objeto::poneValor(double val){
     valores.push_back(val);
 }
 
+void Objeto::calculaPeso(){
+    if(valores.size()>0){
+        double peso=0;
+        for(vector<double>::iterator i = valores.begin(); i!= valores.end(); ++i)
+            peso+=*i;
+        this->peso = peso;
+    }
+    else
+        this->peso = 0;
+}
+

@@ -20,6 +20,7 @@ public:
     Objeto(int pezo);
     virtual ~Objeto();
     void poneValor(double val);
+    void calculaPeso();
 private:
 
 };

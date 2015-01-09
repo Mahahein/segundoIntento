@@ -7,6 +7,7 @@
 
 #include "Saco.h"
 #include "Objeto.h"
+#include "Pivote.h"
 #include <string>
 #include <sstream>
 #include <fstream>
@@ -28,7 +29,7 @@ void Saco::leer(string archivo){
     
     ifstream entrada;
     entrada.open("vector.txt");
-    
+    vector<Pivote*> pivotes;
     string buf;
     long cluster = 1;
     for( string linea; getline(entrada, linea);){
@@ -46,6 +47,7 @@ void Saco::leer(string archivo){
                 ob->poneValor(strtod(buf2, &end));
             }
         }
+        distancias(ob, pivotes);
         //TIENE QUE CALCULAR LA DISTANCIA A LOS CENTROS Y LOS PIVOTES TEMPORALES
         
         //AGREGAR A LA BOLSA
@@ -65,7 +67,7 @@ void Saco::leer(string archivo){
             ss << ".txt";
             //cout << cluster << endl;
             salida = ss.str();
-            cout << salida << cluster << endl;
+            //cout << salida << cluster << endl;
             file.open(salida.c_str());
             
             for(vector<Objeto*>::iterator i = bolsa.begin(); i!= bolsa.end(); ++i){
@@ -112,3 +114,25 @@ void Saco::leer(string archivo){
 
 }
 
+void Saco::peso(Objeto& ob){
+    ob.calculaPeso();
+}
+
+void Saco::distancias(Objeto* ob, vector<Pivote*> & pivots){
+    if(pivots.size()>0){
+        for(vector<Pivote*>::iterator i = pivots.begin(); i!= pivots.end(); ++i){
+            double dist = 0;
+            vector<double>::iterator k = (*i)->centro->valores.begin();
+            vector<double>::iterator l = (ob)->valores.begin();
+            for(; k!=(*i)->centro->valores.end() &&  l!=(ob)->valores.end(); ++k, ++l){
+                dist += ((*k+*l)*(*k+*l));
+            }
+            ob->distancias.push_back(dist);
+        }
+            
+    }
+}
+
+void Saco::nuevaDistancia(Objeto* ob, Pivote* piv){
+    
+}

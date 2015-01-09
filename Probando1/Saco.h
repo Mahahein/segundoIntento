@@ -10,6 +10,7 @@
 #include <vector>
 #include <string>
 #include "Objeto.h"
+#include "Pivote.h"
 using namespace std;
 
 class Saco {
@@ -19,6 +20,10 @@ public:
     Saco(const Saco& orig);
     virtual ~Saco();
     void leer(string archivo);
+    void peso(Objeto& ob);
+    void distancias(Objeto* ob, vector<Pivote*> & pivots);
+    void nuevaDistancia(Objeto* ob, Pivote* piv);
+    
 private:
 
 };
