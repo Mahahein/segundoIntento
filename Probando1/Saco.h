@@ -16,14 +16,16 @@ using namespace std;
 class Saco {
 public:
     vector<Objeto*> bolsa;
+    vector<Pivote*> pivotesProvisorios;
+    vector<Pivote*> pivotesEnMemoria;
     Saco();
     Saco(const Saco& orig);
     virtual ~Saco();
     void leer(string archivo);
-    void peso(Objeto& ob);
-    void distancias(Objeto* ob, vector<Pivote*> & pivots);
-    void nuevaDistancia(Objeto* ob, Pivote* piv);
-    
+    void distanciasAPivotes(Objeto* ob);
+    void distanciaPivoteNuevo(Objeto* ob, Pivote* piv);
+    vector<Objeto*> obtieneCercanos(int id);
+    bool estaEnPivotes(int id);
 private:
 
 };

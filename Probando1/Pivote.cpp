@@ -21,3 +21,7 @@ Pivote::Pivote(Objeto& ob, double r){
     this->centro = &ob;
     this->radio = r;
 }
+
+Pivote::Pivote(Objeto& c){
+    this->centro = &c;
+}

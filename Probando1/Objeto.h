@@ -14,13 +14,18 @@ class Objeto {
 public:
     vector<double> valores;
     vector<double> distancias;
-    double peso;
+    double distanciaAcumulada;
+    int id;
+    int comparando;
     Objeto();
     Objeto(const Objeto& orig);
     Objeto(int pezo);
     virtual ~Objeto();
     void poneValor(double val);
-    void calculaPeso();
+    void aumentaAcumulado(double k);
+    bool operator<(const Objeto& ob) const;
+    bool operator>(const Objeto& ob) const;
+    bool operator==(const Objeto& ob) const;
 private:
 
 };

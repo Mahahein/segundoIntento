@@ -15,6 +15,7 @@ public:
     Objeto *centro;
     Pivote();
     Pivote(const Pivote& orig);
+    Pivote(Objeto &c);
     Pivote(Objeto &ob, double r);
     virtual ~Pivote();
 private:

@@ -10,13 +10,14 @@
 using namespace std;
 
 Objeto::Objeto() {
+    distanciaAcumulada = 0;
 }
 
 Objeto::Objeto(const Objeto& orig) {
-    
+    distanciaAcumulada = 0;
 }
-Objeto::Objeto(int pezo){
-    peso = pezo;
+Objeto::Objeto(int dist){
+    distanciaAcumulada = dist;
 }
 
 Objeto::~Objeto() {
@@ -26,14 +27,18 @@ void Objeto::poneValor(double val){
     valores.push_back(val);
 }
 
-void Objeto::calculaPeso(){
-    if(valores.size()>0){
-        double peso=0;
-        for(vector<double>::iterator i = valores.begin(); i!= valores.end(); ++i)
-            peso+=*i;
-        this->peso = peso;
-    }
-    else
-        this->peso = 0;
+void Objeto::aumentaAcumulado(double k){
+    distanciaAcumulada += k;
 }
 
+bool Objeto::operator <(const Objeto& ob) const{
+    return (distancias.at(comparando) < ob.distancias.at(comparando));
+}
+
+bool Objeto::operator >(const Objeto& ob) const{
+    return (distancias.at(comparando) > ob.distancias.at(comparando));
+}
+
+bool Objeto::operator ==(const Objeto& ob) const{
+    return (id == ob.id);
+}
