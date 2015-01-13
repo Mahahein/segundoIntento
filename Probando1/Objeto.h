@@ -17,6 +17,7 @@ public:
     double distanciaAcumulada;
     int id;
     int comparando;
+    int pos;
     Objeto();
     Objeto(const Objeto& orig);
     Objeto(int pezo);

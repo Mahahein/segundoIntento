@@ -24,8 +24,9 @@ public:
     void leer(string archivo);
     void distanciasAPivotes(Objeto* ob);
     void distanciaPivoteNuevo(Objeto* ob, Pivote* piv);
-    vector<Objeto*> obtieneCercanos(int id);
+    vector<Objeto*> obtieneCercanos(int pos);
     bool estaEnPivotes(int id);
+    double obtieneRadio(vector<Objeto*> & obs, int pos);
 private:
 
 };

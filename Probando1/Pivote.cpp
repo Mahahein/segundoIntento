@@ -25,3 +25,11 @@ Pivote::Pivote(Objeto& ob, double r){
 Pivote::Pivote(Objeto& c){
     this->centro = &c;
 }
+
+bool Pivote::operator <(const Pivote& piv) const{
+    return (radio < piv.radio);
+}
+
+bool Pivote::operator >(const Pivote& piv) const{
+    return (radio > piv.radio);
+}

@@ -17,6 +17,8 @@ public:
     Pivote(const Pivote& orig);
     Pivote(Objeto &c);
     Pivote(Objeto &ob, double r);
+    bool operator<(const Pivote& piv) const;
+    bool operator>(const Pivote& piv) const;
     virtual ~Pivote();
 private:
 
