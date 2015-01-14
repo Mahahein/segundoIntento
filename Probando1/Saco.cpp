@@ -104,31 +104,34 @@ void Saco::leer(string archivo){
         //SI ALCANZAMOS EL TAMANIO ASIGNADO A LA BOLSA
         //TENEMOS QUE VACIAR UN POCO, CREANDO UN CLUSTER
         if(bolsa.size()>=N){
+	    cout << "pasando a memoria" << endl;
             //cout << "hola 2" << endl;
             //ELEGIR UN PIVOTE PARA CENTRO DE CLUSTER
             //PRIMERO DETERMINAR RADIO DE COBERTURA
             //PARA ESTO SE DEBE BUSCAR LOS n-1 VECINOS MAS CERCANOS DE CADA PIVOTE PROVISORIO
             //CREAMOS UNA LISTA AUXILIAR PARA GUARDAR LOS VECTORES CREADOS CON LOS VECINOS DE CADA PIVOTE
-            vector< vector<Objeto*> > listAux;
-            listAux.clear();
+            vector< vector<Objeto*> >* listAux = new vector< vector<Objeto*> >();
+            (*listAux).clear();
             int pos = 0;
             //RECORREMOS EL VECTOR DE PIVOTES PROVISORIOS
+            cout << "obteniendo Cercanos" << endl;
             for(vector<Pivote*>::iterator vi = pivotesProvisorios.begin(); vi != pivotesProvisorios.end() ; ++vi){
                 //POR CADA PIVOTE, OBTENEMOS SUS VECINOS Y LOS GUARDAMOS EN LISTAUX
-                listAux.push_back(obtieneCercanos(pos));
+                (*listAux).push_back(obtieneCercanos(pos));
                 //LUEGO, A CADA PIVOTE LE CALCULAMOS SU RADIO DE COBERTURA
-                (*vi)->radio = obtieneRadio(listAux.back(), pos);
+                (*vi)->radio = obtieneRadio((*listAux).back(), pos);
             }
             //CREAMOS LOS ITERADORES PARA VOLVER A RECORRER EL VECTRO DE PIVOTES PROVISORIOS
             //Y BUSCAR QUE QUE TENGA MENOR RADIO DE COBERTURA
             //Y TAMBIÉN UNA REFERENCIA AL VECTOR DE VECINOS QUE TIENE
             vector<Pivote*>::iterator vi = pivotesProvisorios.begin();
-            vector< vector<Objeto*> >::iterator oi = listAux.begin();
+            vector< vector<Objeto*> >::iterator oi = (*listAux).begin();
             vector<Pivote*>::iterator vi_mayor = vi;
             vector< vector<Objeto*> >::iterator oi_mayor = oi;
             
             //RECORRERMOS EL VECTOR BUSCANDO EL CON MENOR RADIO
-            for(; vi != pivotesProvisorios.end() && oi != listAux.end(); ++vi, ++oi){
+	    cout << "buscando el con menor radio" << endl;
+            for(; vi != pivotesProvisorios.end() && oi != (*listAux).end(); ++vi, ++oi){
                 if((*vi)->radio < (*vi_mayor)->radio){
                     vi_mayor = vi;
                     oi_mayor = oi;
@@ -148,27 +151,35 @@ void Saco::leer(string archivo){
             salida = ss.str();
             //cout << salida << cluster << endl;
             file.open(salida.c_str());
-            
+            cout << "escribiendo archivo de cluster" << endl;
+	    cout << (*oi_mayor).size() << endl;
             for(vector<Objeto*>::iterator i = (*oi_mayor).begin(); i!= (*oi_mayor).end(); ++i){
                 //Objeto o = bolsa.at(i);
-                //cout << bolsa.at(i)->valores.size() << endl;
+                //cout << (*i)->valores.size() << endl;
                 file << (*i)->id << " ";
                 for(vector<double>::iterator k = (*i)->valores.begin(); k!= (*i)->valores.end() ; ++k){
-                    //cout << (bolsa.at(i))->valores.at(k) << endl;
-                    file << *k << " ";
+                    cout << (*k) << " ";
+	    	    file << *k << " ";
                 }
                 file << "\n";
-                bolsa.erase(bolsa.begin()+(*i)->pos);
+		cout << endl;
+                //bolsa.erase(bolsa.begin()+(*i)->pos);
             }
+	    cout << "eliminando de la bolsa" << endl;
+	    for(vector<Objeto*>::iterator i = (*oi_mayor).begin(); i!= (*oi_mayor).end(); ++i){
+		bolsa.erase(bolsa.begin()+(*i)->pos);
+	    }
             file.close();
             (*oi_mayor).clear();
-            listAux.clear();
+            (*listAux).clear();
             cluster++;
             ofstream pivotesDisco;
+	    cout << "agregando el pivote en memoria" << endl;
             pivotesDisco.open("pivotes.txt", ofstream::app);
             
             pivotesDisco << (*vi_mayor)->centro->id << " " << (*vi_mayor)->radio << "\n";
             pivotesEnMemoria.push_back(*vi_mayor);
+	    cout << "sacando el pivote de los provisorios" << endl;
             pivotesProvisorios.erase(vi_mayor);
             //bolsa.erase(vi_mayor);
             pivotesDisco.close();
