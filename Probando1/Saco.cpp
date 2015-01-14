@@ -49,59 +49,50 @@ void Saco::leer(string archivo){
             //cout << buf << endl;
             const char* buf2 = buf.data();
             if(isdigit(buf2[0])){
-                if(cont == 0)
+                if(cont==0)
                     ob->id = strtod(buf2, &end);
                 //cout << buf2 << endl;
-                else if (cont > 2){
+                else if (cont == 1)
+                    continue;
+                else
                     ob->poneValor(strtod(buf2, &end));
-                    //cout << ob->valores.back() << " ";
-                }
+                cont++;
             }
-            cont++;
         }
-        //cout << endl;
         //TIENE QUE CALCULAR LA DISTANCIA A LOS CENTROS Y LOS PIVOTES TEMPORALES
         distanciasAPivotes(ob);
         //AGREGAR A LA BOLSA
-        //cout << bolsa.size() << endl;
         bolsa.push_back(ob);
-        //cout << ob->id << " " << ob->distanciaAcumulada << endl;
+        
         //VERIIFCAR CUANTOS OBJETOS HAY EN LA BOLSA
         //SI HAY B+1 ELEMENTOS (O 1), TIENE QUE ELEGIR UN PIVOTE PROVISORIO
-        
-        if( (bolsa.size() % B) == 1 ){
-            
-            //cout << "hola" << endl;
+        if(bolsa.size()%B == 1){
             //ELEGIR PIVOTE PROVISORIO
             //CREAMOS LOS ITERADORES PARA RECORRER LA BOLSA Y MARCAR EL QUE TENGA MAYOR DISTANCIA ACUMULADA
-            
-            int mayObj = 0;
-            int k = 0;
+            vector<Objeto*>::iterator i = bolsa.begin();
+            vector<Objeto*>::iterator mayObj = i;
             //RECORREMOS LA BOLSA BUSCANDO AL CON MAYOR DISTANCIA ACUMULADA
-            for(vector<Objeto*>::iterator i = bolsa.begin(); i != bolsa.end(); ++i){
-                if(!estaEnPivotes((*i)->id) && (*i)->distanciaAcumulada >= bolsa.at(mayObj)->distanciaAcumulada)
-                    mayObj = k;
-                k++;
+            for(; i != bolsa.end(); ++i){
+                if((*i)->distanciaAcumulada>(*mayObj)->distanciaAcumulada)
+                    mayObj = i;
             }
             //LUEGO, SI O SI TENDREMOS UN OBJETO SELECCIONADO
             //Y CREAMOS UN PIVOTE CON ÉL
-            Pivote* p = new Pivote(*bolsa.at(mayObj));
+            Pivote* p = new Pivote(*(*mayObj));
             //LO AGREGAMOS A LOS PIVOTES PROVISORIOS
             pivotesProvisorios.push_back(p);
             //LO ELIMINAMOS DE LA BOLSA DE OBJETOS ENTRANTES
-            //bolsa.erase(mayObj);
+            bolsa.erase(mayObj);
             //Y AGREGAMOS A LOS DEMAS OBJETOS LA DISTANCIA AL NUEVO PIVOTE CREADO
             for(vector<Objeto*>::iterator j = bolsa.begin(); j != bolsa.end(); ++j){
                 distanciaPivoteNuevo((*j), p);
             }
-            //cout << (*p).centro->id << endl;
         }
         
-
+        
         //SI ALCANZAMOS EL TAMANIO ASIGNADO A LA BOLSA
         //TENEMOS QUE VACIAR UN POCO, CREANDO UN CLUSTER
-        if(bolsa.size()>=N){
-            //cout << "hola 2" << endl;
+        if(bolsa.size()==N){
             //ELEGIR UN PIVOTE PARA CENTRO DE CLUSTER
             //PRIMERO DETERMINAR RADIO DE COBERTURA
             //PARA ESTO SE DEBE BUSCAR LOS n-1 VECINOS MAS CERCANOS DE CADA PIVOTE PROVISORIO
@@ -131,7 +122,7 @@ void Saco::leer(string archivo){
                     oi_mayor = oi;
                 }
             }
-            //cout << (*vi_mayor)->centro->id << endl;
+            
             //PARA VACIAR:
             ////CALCULAR EL CENTRO DE LOS QUE ESTAN EN LA BOLSA
             ofstream file;
@@ -149,7 +140,6 @@ void Saco::leer(string archivo){
             for(vector<Objeto*>::iterator i = (*oi_mayor).begin(); i!= (*oi_mayor).end(); ++i){
                 //Objeto o = bolsa.at(i);
                 //cout << bolsa.at(i)->valores.size() << endl;
-                file << (*i)->id << " ";
                 for(vector<double>::iterator k = (*i)->valores.begin(); k!= (*i)->valores.end() ; ++k){
                     //cout << (bolsa.at(i))->valores.at(k) << endl;
                     file << *k << " ";
@@ -165,9 +155,7 @@ void Saco::leer(string archivo){
             pivotesDisco.open("pivotes.txt", ofstream::app);
             
             pivotesDisco << (*vi_mayor)->centro->id << " " << (*vi_mayor)->radio << "\n";
-            pivotesEnMemoria.push_back(*vi_mayor);
-            pivotesProvisorios.erase(vi_mayor);
-            //bolsa.erase(vi_mayor);
+            
             pivotesDisco.close();
             ////ESCRIBIR LOS DATOS DE LOS OBJETOS EN MEMORIA SECUNDARIA
             ////AGREGAR EL CENTRO A LA LISTA DE PIVOTES EN RAM
@@ -203,51 +191,44 @@ void Saco::leer(string archivo){
 
 
 void Saco::distanciasAPivotes(Objeto* ob){
-    if(!estaEnPivotes((*ob).id)){
-        if(pivotesProvisorios.size()>0){
-            for(vector<Pivote*>::iterator i = pivotesProvisorios.begin(); i!= pivotesProvisorios.end(); ++i){
-                double dist = 0;
-                vector<double>::iterator k = (*i)->centro->valores.begin();
-                vector<double>::iterator l = (ob)->valores.begin();
-                for(; k!=(*i)->centro->valores.end() &&  l!=(ob)->valores.end(); ++k, ++l){
-                    dist += ((*k+*l)*(*k+*l));
-                }
-                ob->distancias.push_back(dist);
-                ob->aumentaAcumulado(dist);
+    if(pivotesProvisorios.size()>0){
+        for(vector<Pivote*>::iterator i = pivotesProvisorios.begin(); i!= pivotesProvisorios.end(); ++i){
+            double dist = 0;
+            vector<double>::iterator k = (*i)->centro->valores.begin();
+            vector<double>::iterator l = (ob)->valores.begin();
+            for(; k!=(*i)->centro->valores.end() &&  l!=(ob)->valores.end(); ++k, ++l){
+                dist += ((*k+*l)*(*k+*l));
             }
-
+            ob->distancias.push_back(dist);
+            ob->aumentaAcumulado(dist);
         }
-        if(pivotesEnMemoria.size()>0){
-            for(vector<Pivote*>::iterator i = pivotesEnMemoria.begin(); i!= pivotesEnMemoria.end(); ++i){
-                double dist = 0;
-                vector<double>::iterator k = (*i)->centro->valores.begin();
-                vector<double>::iterator l = (ob)->valores.begin();
-                for(; k!=(*i)->centro->valores.end() &&  l!=(ob)->valores.end(); ++k, ++l){
-                    dist += ((*k+*l)*(*k+*l));
-                }
-                ob->distancias.push_back(dist);
-                ob->aumentaAcumulado(dist);
-            }
-
-        }
+            
     }
-    else{
-        (*ob).distanciaAcumulada = - DBL_MAX;
+    if(pivotesEnMemoria.size()>0){
+        for(vector<Pivote*>::iterator i = pivotesEnMemoria.begin(); i!= pivotesEnMemoria.end(); ++i){
+            double dist = 0;
+            vector<double>::iterator k = (*i)->centro->valores.begin();
+            vector<double>::iterator l = (ob)->valores.begin();
+            for(; k!=(*i)->centro->valores.end() &&  l!=(ob)->valores.end(); ++k, ++l){
+                dist += ((*k+*l)*(*k+*l));
+            }
+            ob->distancias.push_back(dist);
+            ob->aumentaAcumulado(dist);
+        }
+            
     }
     
 }
 
 void Saco::distanciaPivoteNuevo(Objeto* ob, Pivote* piv){
-    if(!estaEnPivotes((*ob).id)){
-        double dist = 0;
-        vector<double>::iterator k = (piv)->centro->valores.begin();
-        vector<double>::iterator l = (ob)->valores.begin();
-        for(; k != (piv)->centro->valores.end() && l != (ob)->valores.end(); ++k, ++l){
-            dist += ((*k+*l)*(*k+*l));
-        }
-        ob->distancias.push_back(dist);
-        ob->aumentaAcumulado(dist);
+    double dist = 0;
+    vector<double>::iterator k = (piv)->centro->valores.begin();
+    vector<double>::iterator l = (ob)->valores.begin();
+    for(; k != (piv)->centro->valores.end() && l != (ob)->valores.end(); ++k, ++l){
+        dist += ((*k+*l)*(*k+*l));
     }
+    ob->distancias.push_back(dist);
+    ob->aumentaAcumulado(dist);
 }
 
 vector<Objeto*> Saco::obtieneCercanos(int pos){
