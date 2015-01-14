@@ -1,7 +1,7 @@
 all: prueba
 
 prueba : main.o Objeto.o Pivote.o Bloque.o Nodo.o Saco.o
-	g++ main.o Objeto.o Pivote.o Bloque.o Nodo.o Saco.o
+	g++ main.o Objeto.o Pivote.o Bloque.o Nodo.o Saco.o -o prueba
 
 main.o: main.cpp
 	g++ -c main.cpp
