@@ -37,6 +37,8 @@ void Saco::leer(string archivo){
     entrada.open("vector.txt");
     string buf;
     long cluster = 1;
+    yaHayUno = false;
+    yaHayOtro = false;
     for( string linea; getline(entrada, linea);){
         
         stringstream ss(linea);
@@ -95,6 +97,7 @@ void Saco::leer(string archivo){
                 distanciaPivoteNuevo((*j), p);
             }
             //cout << (*p).centro->id << endl;
+            yaHayUno=true;
         }
         
 
@@ -169,6 +172,7 @@ void Saco::leer(string archivo){
             pivotesProvisorios.erase(vi_mayor);
             //bolsa.erase(vi_mayor);
             pivotesDisco.close();
+            yaHayOtro = true;
             ////ESCRIBIR LOS DATOS DE LOS OBJETOS EN MEMORIA SECUNDARIA
             ////AGREGAR EL CENTRO A LA LISTA DE PIVOTES EN RAM
         }      
@@ -274,14 +278,18 @@ vector<Objeto*> Saco::obtieneCercanos(int pos){
 }
 
 bool Saco::estaEnPivotes(int id){
-    for(vector<Pivote*>::iterator i = pivotesProvisorios.begin(); i != pivotesProvisorios.end(); ++i){
-        if(id == (*i)->centro->id){
-            return true;
+    if(yaHayUno){
+        for(vector<Pivote*>::iterator i = pivotesProvisorios.begin(); i != pivotesProvisorios.end(); ++i){
+            if(id == (*i)->centro->id){
+                return true;
+            }
         }
     }
-    for(vector<Pivote*>::iterator k = pivotesEnMemoria.begin(); k != pivotesEnMemoria.end(); ++k){
-        if(id == (*k)->centro->id){
-            return true;
+    if(yaHayOtro){
+        for(vector<Pivote*>::iterator k = pivotesEnMemoria.begin(); k != pivotesEnMemoria.end(); ++k){
+            if(id == (*k)->centro->id){
+                return true;
+            }
         }
     }
     return false;

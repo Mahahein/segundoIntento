@@ -18,6 +18,8 @@ public:
     vector<Objeto*> bolsa;
     vector<Pivote*> pivotesProvisorios;
     vector<Pivote*> pivotesEnMemoria;
+    bool yaHayUno;
+    bool yaHayOtro;
     Saco();
     Saco(const Saco& orig);
     virtual ~Saco();
