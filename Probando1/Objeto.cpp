@@ -42,3 +42,11 @@ bool Objeto::operator >(const Objeto& ob) const{
 bool Objeto::operator ==(const Objeto& ob) const{
     return (id == ob.id);
 }
+
+ostream& Objeto::operator <<(ostream& out, const Objeto& ob){
+    for(vector<double>::iterator i = valores.begin(); i != valores.end(); ++i){
+        out << (*i) << " ";
+    }
+    out << "\n";
+    return out;
+}

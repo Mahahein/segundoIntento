@@ -161,11 +161,12 @@ void Saco::leer(string archivo){
                 //Objeto o = bolsa.at(i);
                 //cout << (*i)->valores.size() << endl;
                 file << (*i)->id << " ";
-                for(vector<double>::iterator k = (*i)->valores.begin(); k!= (*i)->valores.end() ; ++k){
+                /*for(vector<double>::iterator k = (*i)->valores.begin(); k!= (*i)->valores.end() ; ++k){
                     //cout << (*k) << " ";
 	    	    file << *k << " ";
-                }
-                file << "\n";
+                }*/
+                file << (*i);
+                //file << "\n";
 		//cout << endl;
                 //bolsa.erase(bolsa.begin()+(*i)->pos);
             }

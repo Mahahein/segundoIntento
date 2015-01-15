@@ -27,6 +27,7 @@ public:
     bool operator<(const Objeto& ob) const;
     bool operator>(const Objeto& ob) const;
     bool operator==(const Objeto& ob) const;
+    ostream& operator << (ostream& out, const Objeto& ob);
 private:
 
 };
