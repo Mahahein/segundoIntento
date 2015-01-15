@@ -29,6 +29,7 @@ public:
     vector<Objeto*> obtieneCercanos(int pos);
     bool estaEnPivotes(int id);
     double obtieneRadio(vector<Objeto*> & obs, int pos);
+    void sacaPivoteDelSaco(int id);
 private:
 
 };

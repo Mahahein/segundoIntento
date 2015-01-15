@@ -46,6 +46,7 @@ void Saco::leer(string archivo){
         Objeto* ob = new Objeto();
         char* end;
         int cont = 0;
+	//cout << "leyendo objeto" << endl;
         while( ss >> buf ){
             //cout << "Hola" << endl;
             //cout << buf << endl;
@@ -73,7 +74,7 @@ void Saco::leer(string archivo){
         
         if( (bolsa.size() % B) == 1 ){
             
-            //cout << "hola" << endl;
+            //cout << "sacando pivote provisorio" << endl;
             //ELEGIR PIVOTE PROVISORIO
             //CREAMOS LOS ITERADORES PARA RECORRER LA BOLSA Y MARCAR EL QUE TENGA MAYOR DISTANCIA ACUMULADA
             
@@ -81,6 +82,7 @@ void Saco::leer(string archivo){
             int k = 0;
             //RECORREMOS LA BOLSA BUSCANDO AL CON MAYOR DISTANCIA ACUMULADA
             for(vector<Objeto*>::iterator i = bolsa.begin(); i != bolsa.end(); ++i){
+		(*i)->pos = k;
                 if(!estaEnPivotes((*i)->id) && (*i)->distanciaAcumulada >= bolsa.at(mayObj)->distanciaAcumulada)
                     mayObj = k;
                 k++;
@@ -103,8 +105,8 @@ void Saco::leer(string archivo){
 
         //SI ALCANZAMOS EL TAMANIO ASIGNADO A LA BOLSA
         //TENEMOS QUE VACIAR UN POCO, CREANDO UN CLUSTER
-        if(bolsa.size()>=N){
-	    cout << "pasando a memoria" << endl;
+        if(bolsa.size()==N){
+	    //cout << "pasando a memoria" << endl;
             //cout << "hola 2" << endl;
             //ELEGIR UN PIVOTE PARA CENTRO DE CLUSTER
             //PRIMERO DETERMINAR RADIO DE COBERTURA
@@ -114,12 +116,13 @@ void Saco::leer(string archivo){
             (*listAux).clear();
             int pos = 0;
             //RECORREMOS EL VECTOR DE PIVOTES PROVISORIOS
-            cout << "obteniendo Cercanos" << endl;
+            //cout << "obteniendo Cercanos" << endl;
             for(vector<Pivote*>::iterator vi = pivotesProvisorios.begin(); vi != pivotesProvisorios.end() ; ++vi){
                 //POR CADA PIVOTE, OBTENEMOS SUS VECINOS Y LOS GUARDAMOS EN LISTAUX
                 (*listAux).push_back(obtieneCercanos(pos));
                 //LUEGO, A CADA PIVOTE LE CALCULAMOS SU RADIO DE COBERTURA
                 (*vi)->radio = obtieneRadio((*listAux).back(), pos);
+		pos++;
             }
             //CREAMOS LOS ITERADORES PARA VOLVER A RECORRER EL VECTRO DE PIVOTES PROVISORIOS
             //Y BUSCAR QUE QUE TENGA MENOR RADIO DE COBERTURA
@@ -130,9 +133,10 @@ void Saco::leer(string archivo){
             vector< vector<Objeto*> >::iterator oi_mayor = oi;
             
             //RECORRERMOS EL VECTOR BUSCANDO EL CON MENOR RADIO
-	    cout << "buscando el con menor radio" << endl;
+	    //cout << "buscando el con menor radio" << endl;
+	    //cout << pivotesProvisorios.size() << endl;
             for(; vi != pivotesProvisorios.end() && oi != (*listAux).end(); ++vi, ++oi){
-                if((*vi)->radio < (*vi_mayor)->radio){
+                if((*vi)->radio <= (*vi_mayor)->radio){
                     vi_mayor = vi;
                     oi_mayor = oi;
                 }
@@ -151,35 +155,38 @@ void Saco::leer(string archivo){
             salida = ss.str();
             //cout << salida << cluster << endl;
             file.open(salida.c_str());
-            cout << "escribiendo archivo de cluster" << endl;
-	    cout << (*oi_mayor).size() << endl;
+            //cout << "escribiendo archivo de cluster" << endl;
+	    //cout << (*oi_mayor).size() << endl;
             for(vector<Objeto*>::iterator i = (*oi_mayor).begin(); i!= (*oi_mayor).end(); ++i){
                 //Objeto o = bolsa.at(i);
                 //cout << (*i)->valores.size() << endl;
                 file << (*i)->id << " ";
                 for(vector<double>::iterator k = (*i)->valores.begin(); k!= (*i)->valores.end() ; ++k){
-                    cout << (*k) << " ";
+                    //cout << (*k) << " ";
 	    	    file << *k << " ";
                 }
                 file << "\n";
-		cout << endl;
+		//cout << endl;
                 //bolsa.erase(bolsa.begin()+(*i)->pos);
             }
-	    cout << "eliminando de la bolsa" << endl;
+	    //cout << "eliminando de la bolsa" << endl;
 	    for(vector<Objeto*>::iterator i = (*oi_mayor).begin(); i!= (*oi_mayor).end(); ++i){
-		bolsa.erase(bolsa.begin()+(*i)->pos);
+		iter_swap(bolsa.begin()+(*i)->pos, bolsa.begin()+(bolsa.size()-1));
+		bolsa.pop_back();
+		//bolsa.erase(bolsa.begin()+(*i)->pos);
 	    }
             file.close();
             (*oi_mayor).clear();
             (*listAux).clear();
             cluster++;
             ofstream pivotesDisco;
-	    cout << "agregando el pivote en memoria" << endl;
+	    //cout << "agregando el pivote en memoria" << endl;
             pivotesDisco.open("pivotes.txt", ofstream::app);
             
             pivotesDisco << (*vi_mayor)->centro->id << " " << (*vi_mayor)->radio << "\n";
             pivotesEnMemoria.push_back(*vi_mayor);
-	    cout << "sacando el pivote de los provisorios" << endl;
+	    //cout << "sacando el pivote de los provisorios" << endl;
+	    sacaPivoteDelSaco((*vi_mayor)->centro->id);
             pivotesProvisorios.erase(vi_mayor);
             //bolsa.erase(vi_mayor);
             pivotesDisco.close();
@@ -313,4 +320,13 @@ double Saco::obtieneRadio(vector<Objeto*>& obs, int pos){
             mayor = (*i)->distancias.at(pos);
     }
     return mayor;
+}
+
+void Saco::sacaPivoteDelSaco(int id){
+    for(vector<Objeto*>::iterator i = bolsa.begin(); i != bolsa.end(); ++i){
+	if((*i)->id == id){
+	    bolsa.erase(i);
+	    return;
+	}
+    }
 }
