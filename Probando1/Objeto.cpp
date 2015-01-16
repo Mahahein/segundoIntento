@@ -7,6 +7,7 @@
 
 #include "Objeto.h"
 #include <vector>
+#include <iostream>
 using namespace std;
 
 Objeto::Objeto() {
@@ -43,9 +44,9 @@ bool Objeto::operator ==(const Objeto& ob) const{
     return (id == ob.id);
 }
 
-ostream& Objeto::operator <<(ostream& out, const Objeto& ob){
-    for(vector<double>::iterator i = valores.begin(); i != valores.end(); ++i){
-        out << (*i) << " ";
+ostream& Objeto::operator <<(ostream& out){
+    for(int i = 0; i < valores.size(); i++){
+        out << valores.at(i) << " ";
     }
     out << "\n";
     return out;

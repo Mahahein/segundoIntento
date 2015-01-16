@@ -8,6 +8,7 @@
 #ifndef OBJETO_H
 #define	OBJETO_H
 #include <vector>
+#include <iostream>
 using namespace std;
 
 class Objeto {
@@ -27,7 +28,7 @@ public:
     bool operator<(const Objeto& ob) const;
     bool operator>(const Objeto& ob) const;
     bool operator==(const Objeto& ob) const;
-    ostream& operator << (ostream& out, const Objeto& ob);
+    ostream& operator << (ostream& out);
 private:
 
 };

@@ -30,6 +30,7 @@ public:
     bool estaEnPivotes(int id);
     double obtieneRadio(vector<Objeto*> & obs, int pos);
     void sacaPivoteDelSaco(int id);
+    void agregarACercanosDePivotes(Objeto* ob);
 private:
 
 };
