@@ -36,23 +36,29 @@ void Saco::leer(string archivo){
     
     ifstream entrada;
     entrada.open("vector.txt");
-    string buf;
+    string buf, salida;
+    const char* buf2;
     long cluster = 1;
     int nPivotes = 0;
     yaHayUno = false;
     yaHayOtro = false;
+    char* end;
+    int cont, mayObj, k;
+    vector<Objeto*>::iterator i;
+    vector<Pivote*>::iterator menor, vi;
+    vector<double>::iterator j;
     for( string linea; getline(entrada, linea);){
         
         stringstream ss(linea);
         
         Objeto* ob = new Objeto();
-        char* end;
-        int cont = 0;
+        
+        cont = 0;
 	//cout << "leyendo objeto" << endl;
         while( ss >> buf ){
             //cout << "Hola" << endl;
             //cout << buf << endl;
-            const char* buf2 = buf.data();
+            buf2 = buf.data();
             if(isdigit(buf2[0])){
                 if(cont == 0)
                     ob->id = strtod(buf2, &end);
@@ -82,10 +88,10 @@ void Saco::leer(string archivo){
             //ELEGIR PIVOTE PROVISORIO
             //CREAMOS LOS ITERADORES PARA RECORRER LA BOLSA Y MARCAR EL QUE TENGA MAYOR DISTANCIA ACUMULADA
             
-            int mayObj = 0;
-            int k = 0;
+            mayObj = 0;
+            k = 0;
             //RECORREMOS LA BOLSA BUSCANDO AL CON MAYOR DISTANCIA ACUMULADA
-            for(vector<Objeto*>::iterator i = bolsa.begin(); i != bolsa.end(); ++i){
+            for( i = bolsa.begin(); i != bolsa.end(); ++i){
 		(*i)->pos = k;
                 if(!estaEnPivotes((*i)->id) && (*i)->distanciaAcumulada >= bolsa.at(mayObj)->distanciaAcumulada)
                     mayObj = k;
@@ -101,8 +107,8 @@ void Saco::leer(string archivo){
             //LO ELIMINAMOS DE LA BOLSA DE OBJETOS ENTRANTES
             //bolsa.erase(mayObj);
             //Y AGREGAMOS A LOS DEMAS OBJETOS LA DISTANCIA AL NUEVO PIVOTE CREADO
-            for(vector<Objeto*>::iterator j = bolsa.begin(); j != bolsa.end(); ++j){
-                distanciaPivoteNuevo((*j), p);
+            for( i = bolsa.begin(); i != bolsa.end(); ++i){
+                distanciaPivoteNuevo((*i), p);
             }
 	    //cout << "obteniendo sus cercanos" << endl;
 	    (*p).cercanos = obtieneCercanos(p->pos);
@@ -126,14 +132,14 @@ void Saco::leer(string archivo){
             //int pos = 0;
             //RECORREMOS EL VECTOR DE PIVOTES PROVISORIOS
             //cout << "obteniendo el de menor radio" << endl;
-	    vector<Pivote*>::iterator mayor = pivotesProvisorios.begin();
-            for(vector<Pivote*>::iterator vi = pivotesProvisorios.begin(); vi != pivotesProvisorios.end() ; ++vi){
+	    menor = pivotesProvisorios.begin();
+            for( vi = pivotesProvisorios.begin(); vi != pivotesProvisorios.end() ; ++vi ){
                 //POR CADA PIVOTE, OBTENEMOS SUS VECINOS Y LOS GUARDAMOS EN LISTAUX
                 //(*listAux).push_back(obtieneCercanos((*vi)->pos));
                 //LUEGO, A CADA PIVOTE LE CALCULAMOS SU RADIO DE COBERTURA
                 //(*vi)->radio = obtieneRadio((*listAux).back(),(*vi)-> pos);
-		if((*mayor)->radio > (*vi)->radio)
-		    mayor = vi;
+		if((*menor)->radio > (*vi)->radio)
+		    menor = vi;
 		
             }
             //CREAMOS LOS ITERADORES PARA VOLVER A RECORRER EL VECTRO DE PIVOTES PROVISORIOS
@@ -158,7 +164,7 @@ void Saco::leer(string archivo){
             ////CALCULAR EL CENTRO DE LOS QUE ESTAN EN LA BOLSA
             ofstream file;
             //cout << "sacando " << bolsa.size()*sizeof(double) << endl;
-            string salida;
+            
             stringstream ss;
             ss << "cluster";
             ss << cluster;
@@ -169,13 +175,13 @@ void Saco::leer(string archivo){
             file.open(salida.c_str());
             //cout << "escribiendo archivo de cluster" << endl;
 	    //cout << (*oi_mayor).size() << endl;
-            for(vector<Objeto*>::iterator i = (*mayor)->cercanos.begin(); i!= (*mayor)->cercanos.end(); ++i){
+            for( i = (*menor)->cercanos.begin(); i!= (*menor)->cercanos.end(); ++i){
                 //Objeto o = bolsa.at(i);
                 //cout << (*i)->valores.size() << endl;
                 file << (*i)->id << " ";
-                for(vector<double>::iterator k = (*i)->valores.begin(); k!= (*i)->valores.end() ; ++k){
+                for( j = (*i)->valores.begin(); j!= (*i)->valores.end() ; ++j){
                     //cout << (*k) << " ";
-	    	    file << *k << " ";
+	    	    file << *j << " ";
                 }
                 //file << (*i);
                 file << "\n";
@@ -183,7 +189,7 @@ void Saco::leer(string archivo){
                 //bolsa.erase(bolsa.begin()+(*i)->pos);
             }
 	    //cout << "eliminando de la bolsa" << endl;
-	    for(vector<Objeto*>::iterator i = (*mayor)->cercanos.begin(); i!= (*mayor)->cercanos.end(); ++i){
+	    for( i = (*menor)->cercanos.begin(); i!= (*menor)->cercanos.end(); ++i){
 		iter_swap(bolsa.begin()+(*i)->pos, bolsa.begin()+(bolsa.size()-1));
 		bolsa.pop_back();
 		//bolsa.erase(bolsa.begin()+(*i)->pos);
@@ -196,11 +202,11 @@ void Saco::leer(string archivo){
 	    //cout << "agregando el pivote en vector de pivotesEnMemoria" << endl;
             pivotesDisco.open("pivotes.txt", ofstream::app);
             
-            pivotesDisco << (*mayor)->centro->id << " " << (*mayor)->radio << "\n";
-            pivotesEnMemoria.push_back(*mayor);
+            pivotesDisco << (*menor)->centro->id << " " << (*menor)->radio << "\n";
+            pivotesEnMemoria.push_back(*menor);
 	    //cout << "sacando el pivote de los provisorios" << endl;
-	    sacaPivoteDelSaco((*mayor)->centro->id);
-            pivotesProvisorios.erase(mayor);
+	    sacaPivoteDelSaco((*menor)->centro->id);
+            pivotesProvisorios.erase(menor);
             //bolsa.erase(vi_mayor);
             pivotesDisco.close();
             yaHayOtro = true;
