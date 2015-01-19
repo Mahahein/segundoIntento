@@ -31,6 +31,7 @@ public:
     double obtieneRadio(vector<Objeto*> & obs, int pos);
     void sacaPivoteDelSaco(int id);
     void agregarACercanosDePivotes(Objeto* ob);
+    void eliminarObjetoDeCercanos(int idPiv, int idObj);
 private:
 
 };

@@ -35,6 +35,7 @@ Saco::~Saco() {
 void Saco::leer(string archivo){
     
     ifstream entrada;
+    ofstream pivotesDisco;
     entrada.open("vector.txt");
     string buf, salida;
     const char* buf2;
@@ -47,6 +48,7 @@ void Saco::leer(string archivo){
     vector<Objeto*>::iterator i;
     vector<Pivote*>::iterator menor, vi;
     vector<double>::iterator j;
+    ofstream file;
     for( string linea; getline(entrada, linea);){
         
         stringstream ss(linea);
@@ -162,7 +164,7 @@ void Saco::leer(string archivo){
             //cout << (*vi_mayor)->centro->id << endl;
             //PARA VACIAR:
             ////CALCULAR EL CENTRO DE LOS QUE ESTAN EN LA BOLSA
-            ofstream file;
+            
             //cout << "sacando " << bolsa.size()*sizeof(double) << endl;
             
             stringstream ss;
@@ -191,6 +193,7 @@ void Saco::leer(string archivo){
 	    //cout << "eliminando de la bolsa" << endl;
 	    for( i = (*menor)->cercanos.begin(); i!= (*menor)->cercanos.end(); ++i){
 		iter_swap(bolsa.begin()+(*i)->pos, bolsa.begin()+(bolsa.size()-1));
+                eliminarObjetoDeCercanos((*menor)->centro->id, (*i)->id);
 		bolsa.pop_back();
 		//bolsa.erase(bolsa.begin()+(*i)->pos);
 	    }
@@ -198,7 +201,6 @@ void Saco::leer(string archivo){
             //(*oi_mayor).clear();
             //(*listAux).clear();
             cluster++;
-            ofstream pivotesDisco;
 	    //cout << "agregando el pivote en vector de pivotesEnMemoria" << endl;
             pivotesDisco.open("pivotes.txt", ofstream::app);
             
@@ -244,12 +246,14 @@ void Saco::leer(string archivo){
 
 
 void Saco::distanciasAPivotes(Objeto* ob){
+    vector<double>::iterator k;
+    vector<double>::iterator l;
     if(!estaEnPivotes((*ob).id)){
         if(pivotesProvisorios.size()>0){
             for(vector<Pivote*>::iterator i = pivotesProvisorios.begin(); i!= pivotesProvisorios.end(); ++i){
                 double dist = 0;
-                vector<double>::iterator k = (*i)->centro->valores.begin();
-                vector<double>::iterator l = (ob)->valores.begin();
+                k = (*i)->centro->valores.begin();
+                l = (ob)->valores.begin();
                 for(; k!=(*i)->centro->valores.end() &&  l!=(ob)->valores.end(); ++k, ++l){
                     dist += ((*k+*l)*(*k+*l));
                 }
@@ -261,8 +265,8 @@ void Saco::distanciasAPivotes(Objeto* ob){
         if(pivotesEnMemoria.size()>0){
             for(vector<Pivote*>::iterator i = pivotesEnMemoria.begin(); i!= pivotesEnMemoria.end(); ++i){
                 double dist = 0;
-                vector<double>::iterator k = (*i)->centro->valores.begin();
-                vector<double>::iterator l = (ob)->valores.begin();
+                k = (*i)->centro->valores.begin();
+                l = (ob)->valores.begin();
                 for(; k!=(*i)->centro->valores.end() &&  l!=(ob)->valores.end(); ++k, ++l){
                     dist += ((*k+*l)*(*k+*l));
                 }
@@ -279,10 +283,12 @@ void Saco::distanciasAPivotes(Objeto* ob){
 }
 
 void Saco::distanciaPivoteNuevo(Objeto* ob, Pivote* piv){
+    vector<double>::iterator k;
+    vector<double>::iterator l;
     if(!estaEnPivotes((*ob).id)){
         double dist = 0;
-        vector<double>::iterator k = (piv)->centro->valores.begin();
-        vector<double>::iterator l = (ob)->valores.begin();
+        k = (piv)->centro->valores.begin();
+        l = (ob)->valores.begin();
         for(; k != (piv)->centro->valores.end() && l != (ob)->valores.end(); ++k, ++l){
             dist += ((*k+*l)*(*k+*l));
         }
@@ -368,11 +374,33 @@ void Saco::agregarACercanosDePivotes(Objeto* ob){
 	    	(*i)->actualizaRadio2();
 	    }
 	    else if( (*ob).distancias.at((*i)->pos) < (*i)->radio2){
-		(*i)->ordenaReemplazos((*i)->pos);
+		(*i)->ordenaReemplazos((*i)->pos, 1);
 		(*i)->reemplazos.pop_back();
 		(*i)->reemplazos.push_back(ob);
 		(*i)->actualizaRadio2();
 	    }
 	}
     }
-} 
+}
+
+void Saco::eliminarObjetoDeCercanos(int idPiv, int idObj){
+    vector<Pivote*>::iterator i;
+    vector<Objeto*>::iterator j;
+    for(i = pivotesProvisorios.begin(); i != pivotesProvisorios.end(); ++i){
+        if( (*i)->centro->id != idPiv ){
+            for( j = (*i)->cercanos.begin(); j != (*i)->cercanos.end(); ++j ){
+                if( (*j)->id == idObj ){
+                    iter_swap( j , (*i)->cercanos.begin()+((*i)->cercanos.size -1) );
+                    (*i)->cercanos.pop_back();
+                    if( (*i)->reemplazos.size > 0 ){
+                        (*i)->ordenaReemplazos((*i)->pos, 2);
+                        (*i)->cercanos.push_back((*i)->reemplazos.back());
+                        (*i)->reemplazos.pop_back();
+                        (*i)->actualizaRadio2();
+                    }
+                    (*i)->actualizaRadio();
+                }
+            }
+        }
+    }
+}

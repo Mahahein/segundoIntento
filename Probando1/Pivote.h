@@ -28,7 +28,7 @@ public:
     void actualizaRadio();
     void actualizaRadio2();
     void ordenaCercanos(int pos);
-    void ordenaReemplazos(int pos);
+    void ordenaReemplazos(int pos, int modo);
 private:
 
 };

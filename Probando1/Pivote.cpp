@@ -11,6 +11,8 @@
 #include <algorithm>
 
 Pivote::Pivote() {
+    this->cercanos = new vector<Objeto*>(31);
+    this->reemplazos = new vector<Objeto*>(31);
 }
 
 Pivote::Pivote(const Pivote& orig) {
@@ -61,11 +63,14 @@ void Pivote::ordenaCercanos(int pos){
     sort( cercanos.begin(), cercanos.end());
 }
 
-void Pivote::ordenaReemplazos(int pos){
+void Pivote::ordenaReemplazos(int pos, int modo){
     for(vector<Objeto*>::iterator i = reemplazos.begin(); i != reemplazos.end(); ++i){
         (*i)->comparando = pos;
     }
-    sort( reemplazos.begin(), reemplazos.end());
+    if(modo==1)
+        sort( reemplazos.begin(), reemplazos.end());
+    else
+        sort( reemplazos.begin(), reemplazos.end(), Objeto.operator >() );
 }
 
 
