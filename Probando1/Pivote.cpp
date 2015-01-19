@@ -28,6 +28,8 @@ Pivote::Pivote(Objeto& ob, double r){
 
 Pivote::Pivote(Objeto& c){
     this->centro = &c;
+    this->cercanos = new vector<Objeto*>(31);
+    this->reemplazos = new vector<Objeto*>(31);
 }
 
 bool Pivote::operator <(const Pivote& piv) const{
