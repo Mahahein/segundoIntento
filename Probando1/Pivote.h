@@ -17,7 +17,7 @@ public:
     Objeto *centro;
     int pos;
     vector<Objeto*> cercanos;
-    vector<Objeto*> reemplazos;
+    //vector<Objeto*> reemplazos;
     Pivote();
     Pivote(const Pivote& orig);
     Pivote(Objeto &c);

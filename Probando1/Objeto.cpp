@@ -12,13 +12,16 @@ using namespace std;
 
 Objeto::Objeto() {
     distanciaAcumulada = 0;
+    esPivote = false;
 }
 
 Objeto::Objeto(const Objeto& orig) {
     distanciaAcumulada = 0;
+    esPivote = false;
 }
 Objeto::Objeto(int dist){
     distanciaAcumulada = dist;
+    esPivote = false;
 }
 
 Objeto::~Objeto() {

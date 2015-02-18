@@ -26,12 +26,12 @@ public:
     void leer(string archivo);
     void distanciasAPivotes(Objeto* ob);
     void distanciaPivoteNuevo(Objeto* ob, Pivote* piv);
-    vector<Objeto*> obtieneCercanos(int pos);
+    void obtieneCercanos(Pivote* p);
     bool estaEnPivotes(int id);
     double obtieneRadio(vector<Objeto*> & obs, int pos);
     void sacaPivoteDelSaco(int id);
-    void agregarACercanosDePivotes(Objeto* ob);
-    void eliminarObjetoDeCercanos(int idPiv, int idObj);
+    //void agregarACercanosDePivotes(Objeto* ob);
+    //void eliminarObjetoDeCercanos(int idPiv, int idObj);
 private:
 
 };

@@ -19,6 +19,7 @@ public:
     int id;
     int comparando;
     int pos;
+    bool esPivote;
     Objeto();
     Objeto(const Objeto& orig);
     Objeto(int pezo);
