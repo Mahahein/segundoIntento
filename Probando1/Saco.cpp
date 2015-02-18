@@ -9,6 +9,7 @@
 #include "Objeto.h"
 #include "Pivote.h"
 #include <string>
+#include <cstring>
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -17,9 +18,9 @@
 #include <float.h>
 #include <algorithm>
 #include <math.h>
-#define N 2048
-#define n 32
-#define B 32
+#define N 40
+#define n 5
+#define B 5
 
 using namespace std;
 
@@ -43,7 +44,7 @@ void Saco::leer(string archivo){
     yaHayUno = false;
     yaHayOtro = false;
     char* end;
-    int cont, mayObj, k;
+    int cont, mayObj, k, l, minPiv;
     vector<Objeto*>::iterator i;
     vector<Pivote*>::iterator menor, vi;
     vector<double>::iterator j;
@@ -51,11 +52,11 @@ void Saco::leer(string archivo){
     for( string linea; getline(entrada, linea);){
         
         stringstream ss(linea);
-        cout << "creando objeto" << endl;
+        //cout << "creando objeto" << endl;
         Objeto* ob = new Objeto();
         
         cont = 0;
-        cout << "leyendo objeto" << endl;
+        //cout << "leyendo objeto" << endl;
         while( ss >> buf ){
             //cout << "Hola" << endl;
             //cout << buf << endl;
@@ -75,116 +76,101 @@ void Saco::leer(string archivo){
         distanciasAPivotes(ob);
         bolsa.push_back(ob);
 
-        //cout << ob->id << " " << ob->distanciaAcumulada << endl;
-        //VERIIFCAR CUANTOS OBJETOS HAY EN LA BOLSA
-        //SI HAY B+1 ELEMENTOS (O 1), TIENE QUE ELEGIR UN PIVOTE PROVISORIO
-        if( (bolsa.size() % B) == 1 ){
-            
+        //ELEGIR UN PIVOTE PROVISORIO
+        if( (bolsa.size()%B) == 1 ){
             cout << "sacando pivote provisorio" << endl;
-            //ELEGIR PIVOTE PROVISORIO
-            //CREAMOS LOS ITERADORES PARA RECORRER LA BOLSA Y MARCAR EL QUE TENGA MAYOR DISTANCIA ACUMULADA
-            
             mayObj = 0;
-            k = 0;
-            //RECORREMOS LA BOLSA BUSCANDO AL CON MAYOR DISTANCIA ACUMULADA
-            cout << "recorriendo la bolsa" << endl;
-            for( i = bolsa.begin(); i != bolsa.end(); ++i){
-                (*i)->pos = k;
-                if(!(*i)->esPivote && (*i)->distanciaAcumulada >= bolsa.at(mayObj)->distanciaAcumulada)
+            for( k = 0; k < bolsa.size(); k++){
+                if( bolsa[k]->distanciaAcumulada >= bolsa[mayObj]->distanciaAcumulada && !bolsa[k]->esPivote )
                     mayObj = k;
-                k++;
             }
-            //LUEGO, SI O SI TENDREMOS UN OBJETO SELECCIONADO
-            //Y CREAMOS UN PIVOTE CON ÉL
-            cout << "creando el pivote provisorio" << endl;
-            Pivote* p = new Pivote(*bolsa.at(mayObj));
-            (*p).pos = nPivotes;
-            cout << "marcando el objeto como pivote" << endl;
-            (bolsa.at(mayObj))->esPivote = true;
-            //LO AGREGAMOS A LOS PIVOTES PROVISORIOS
-            pivotesProvisorios.push_back(p);
-            //LO ELIMINAMOS DE LA BOLSA DE OBJETOS ENTRANTES
-            //bolsa.erase(mayObj);
-            //Y AGREGAMOS A LOS DEMAS OBJETOS LA DISTANCIA AL NUEVO PIVOTE CREADO
-            cout << "agregando la distancia a este pivote a los objetos de la bolsa" << endl;
-            for( i = bolsa.begin(); i != bolsa.end(); ++i){
-                distanciaPivoteNuevo((*i), p);
-            }
-           //cout << "obteniendo sus cercanos" << endl;
-            //(*p).cercanos = obtieneCercanos(p->pos);
+
+            cout << "creando pivote provisorio" << endl;
+            Pivote* piv = new Pivote();
+            piv->centro = bolsa[mayObj];
+            piv->centro->id = bolsa[mayObj]->id;
+            piv->pos = nPivotes;
+            bolsa[mayObj]->esPivote = true;
+            pivotesProvisorios.push_back(piv);
+            yaHayUno = true;
             nPivotes++;
-            //cout << (*p).centro->id << endl;
-            yaHayUno=true;
-            cout << "saliendo de la creaciondel pivote provisorio" << endl;
-        }
-        
-        //SI ALCANZAMOS EL TAMANIO ASIGNADO A LA BOLSA
-        //TENEMOS QUE VACIAR UN POCO, CREANDO UN CLUSTER
-        if(bolsa.size()==N){
-            cout << "pasando a memoria" << endl;
-            //RECORREMOS EL VECTOR DE PIVOTES PROVISORIOS
-            cout << "obteniendo el de menor radio" << endl;
-            menor = pivotesProvisorios.begin();
-            for( vi = pivotesProvisorios.begin(); vi != pivotesProvisorios.end() ; ++vi ){
-                //POR CADA PIVOTE, OBTENEMOS SUS VECINOS Y LOS GUARDAMOS EN SUS CERCANOS
-                obtieneCercanos((*vi));
-                (*vi)->actualizaRadio();
-                //LUEGO, A CADA PIVOTE LE CALCULAMOS SU RADIO DE COBERTURA
-                //(*vi)->radio = obtieneRadio((*listAux).back(),(*vi)-> pos);
-                if((*menor)->radio > (*vi)->radio)
-                    menor = vi;
-        
+
+            for( k = 0; k < bolsa.size(); k++ ){
+                distanciaPivoteNuevo(bolsa[k], piv);
             }
+
+        }
+        //PASAR UN PIVOTE A MEMORIA SECUNDARIA
+        if( bolsa.size() == N ){
+            cout << " antes bolsa.size() : " << bolsa.size() << endl;
+            cout << "sacando pivote a memoria" << endl;
+            cout << "pivotesProvisorios.size() :" << pivotesProvisorios.size() << endl;
+            minPiv = 0;
             
+            for( k = 0; k < pivotesProvisorios.size(); k++){
+                
+                //cout << "buscando cercanos" << endl;
+                obtieneCercanos(pivotesProvisorios[k]);
+                pivotesProvisorios[k]->actualizaRadio();
+                //cout << "paso el actualizaRadio" << endl;
+                if( pivotesProvisorios[k]->radio <= pivotesProvisorios[minPiv]->radio )
+                    minPiv = k;
+                //cout << "paso el if" << endl;
+            }
+
+            
+
             stringstream ss;
             ss << "cluster";
             ss << cluster;
             ss << ".txt";
-            //cout << cluster << endl;
             salida = ss.str();
-            //cout << salida << cluster << endl;
+
             file.open(salida.c_str());
-            cout << "escribiendo archivo de cluster" << endl;
-            //cout << (*oi_mayor).size() << endl;
-            for( i = (*menor)->cercanos.begin(); i!= (*menor)->cercanos.end(); ++i){
-                //Objeto o = bolsa.at(i);
-                //cout << (*i)->valores.size() << endl;
-                file << (*i)->id << " ";
-                for( j = (*i)->valores.begin(); j!= (*i)->valores.end() ; ++j){
-                    //cout << (*k) << " ";
-                    file << *j << " ";
+            
+            for( k = 0; k < pivotesProvisorios[minPiv]->cercanos.size(); k++ ){
+                for( l = 0; l < pivotesProvisorios[minPiv]->cercanos[k]->valores.size(); l++ ){
+                    file << pivotesProvisorios[minPiv]->cercanos[k]->valores[l] << " ";
                 }
-                //file << (*i);
                 file << "\n";
-                //cout << endl;
-                //bolsa.erase(bolsa.begin()+(*i)->pos);
-            }
-            cout << "eliminando de la bolsa" << endl;
-            for( i = (*menor)->cercanos.begin(); i!= (*menor)->cercanos.end(); ++i){
-                iter_swap(bolsa.begin()+(*i)->pos, bolsa.begin()+(bolsa.size()-1));
-                //eliminarObjetoDeCercanos((*menor)->centro->id, (*i)->id);
-                bolsa.pop_back();
-                //bolsa.erase(bolsa.begin()+(*i)->pos);
             }
             file.close();
-            //(*oi_mayor).clear();
-            //(*listAux).clear();
-            cluster++;
-            cout << "agregando el pivote en vector de pivotesEnMemoria" << endl;
-            pivotesDisco.open("pivotes.txt", ofstream::app);
-            
-            pivotesDisco << (*menor)->centro->id << " " << (*menor)->radio << "\n";
-            pivotesEnMemoria.push_back(*menor);
-            //cout << "sacando el pivote de los provisorios" << endl;
-            sacaPivoteDelSaco((*menor)->centro->id);
-            pivotesProvisorios.erase(menor);
-            //bolsa.erase(vi_mayor);
-            pivotesDisco.close();
+
+            for( k = 0; k < pivotesProvisorios[minPiv]->cercanos.size(); k++){
+                //iter_swap( bolsa.begin() + pivotesProvisorios[minPiv]->cercanos[k]->pos , bolsa.begin() + (bolsa.size() - 1) );
+                cout << pivotesProvisorios[minPiv]->cercanos[k]->id << " ";
+                bolsa[pivotesProvisorios[minPiv]->cercanos[k]->pos] = bolsa[bolsa.size()-1];
+                bolsa.pop_back();
+                bolsa[pivotesProvisorios[minPiv]->cercanos[k]->pos]->pos = pivotesProvisorios[minPiv]->cercanos[k]->pos;
+            }
+            cout << endl;
+
+            for( k = 0; k < bolsa.size(); k++){
+                cout << bolsa[k]->id << " ";
+            }
+            cout << endl;
+            for( k = 0; k < pivotesProvisorios.size(); k++ ){
+                cout << pivotesProvisorios[k]->centro->id << " ";
+            }
+            cout << endl;
+
+            sacaPivoteDelSaco( pivotesProvisorios[minPiv]->centro->id );
+            //bolsa.erase(bolsa.begin() + pivotesProvisorios[minPiv]->centro->pos );
+
+            pivotesEnMemoria.push_back(pivotesProvisorios[minPiv]);
+            pivotesProvisorios.erase(pivotesProvisorios.begin() + minPiv);
+            //iter_swap(pivotesProvisorios.begin() + minPiv , pivotesProvisorios.begin() + (pivotesProvisorios.size() -1) );
+            //pivotesProvisorios[minPiv] = pivotesProvisorios[pivotesProvisorios.size()-1];
+            //pivotesProvisorios.pop_back();
+            //pivotesProvisorios.erase(pivotesProvisorios.begin() + pivotesProvisorios[minPiv]->pos);
             yaHayOtro = true;
-            ////ESCRIBIR LOS DATOS DE LOS OBJETOS EN MEMORIA SECUNDARIA
-            ////AGREGAR EL CENTRO A LA LISTA DE PIVOTES EN RAM
-        }   
+            cluster++;
+            cout << "despues bolsa.size() : " << bolsa.size() << endl;
+        }
+        
+
     }
+        
     
     entrada.close();  
 
@@ -244,24 +230,25 @@ void Saco::distanciaPivoteNuevo(Objeto* ob, Pivote* piv){
 }
 
 void Saco::obtieneCercanos(Pivote* p){
-    int pos = 0;
-    for(vector<Objeto*>::iterator k = bolsa.begin(); k != bolsa.end(); ++k){
-        (*k)->comparando = p->pos;
-        (*k)->pos = pos;
-        if(!(*k)->esPivote){
+    p->cercanos.clear();
+    for( int k = 0; k < bolsa.size(); k++){
+        bolsa[k]->comparando = p->pos;
+        bolsa[k]->pos = k;
+
+        if(!bolsa[k]->esPivote){
             if(p->cercanos.size()<(n-1)){
-                p->cercanos.push_back((*k));
+                p->cercanos.push_back(bolsa[k]);
+                p->actualizaMasLejano();
             }
             else{
-                sort(p->cercanos.begin(), p->cercanos.end());
-                if((*k) < p->cercanos.back()){
-                    p->cercanos.pop_back();
-                    p->cercanos.push_back((*k));
+                if( bolsa[k]->distancias[p->pos] < p->radio ){
+                    p->cercanos[p->posMasLejano] = (bolsa[k]);
+                    p->actualizaMasLejano();
                 }
             }
         }
-        p++;
     }
+    //cout << "saliendo de buscar los cercanos" << endl;
 }
 
 bool Saco::estaEnPivotes(int id){
@@ -292,11 +279,13 @@ double Saco::obtieneRadio(vector<Objeto*>& obs, int pos){
 }
 
 void Saco::sacaPivoteDelSaco(int id){
-    for(vector<Objeto*>::iterator i = bolsa.begin(); i != bolsa.end(); ++i){
-	if((*i)->id == id){
-	    bolsa.erase(i);
-	    return;
-	}
+    cout << "id pivote : " << id << endl;
+    for(int i = 0; i < bolsa.size(); i++){
+	    if( bolsa[i]->id == id){
+            cout << "pillo el pivote en la bolsa" << endl;
+	        bolsa.erase(bolsa.begin() + i);
+	        return;
+	    }
     }
 }
 

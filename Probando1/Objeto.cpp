@@ -13,15 +13,21 @@ using namespace std;
 Objeto::Objeto() {
     distanciaAcumulada = 0;
     esPivote = false;
+    comparando = 0;
+    pos = 0;
 }
 
 Objeto::Objeto(const Objeto& orig) {
     distanciaAcumulada = 0;
     esPivote = false;
+    comparando = 0;
+    pos = 0;
 }
 Objeto::Objeto(int dist){
     distanciaAcumulada = dist;
     esPivote = false;
+    comparando = 0;
+    pos = 0;
 }
 
 Objeto::~Objeto() {
@@ -53,4 +59,8 @@ ostream& Objeto::operator <<(ostream& out){
     }
     out << "\n";
     return out;
+}
+
+Objeto Objeto::newObjeto(){
+    return Objeto();
 }

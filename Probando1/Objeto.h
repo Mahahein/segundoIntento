@@ -30,6 +30,7 @@ public:
     bool operator>(const Objeto& ob) const;
     bool operator==(const Objeto& ob) const;
     ostream& operator << (ostream& out);
+    Objeto newObjeto();
 private:
 
 };

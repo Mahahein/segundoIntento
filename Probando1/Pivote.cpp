@@ -11,8 +11,6 @@
 #include <algorithm>
 
 Pivote::Pivote() {
-    this->cercanos = new vector<Objeto*>(31);
-    this->reemplazos = new vector<Objeto*>(31);
 }
 
 Pivote::Pivote(const Pivote& orig) {
@@ -28,8 +26,6 @@ Pivote::Pivote(Objeto& ob, double r){
 
 Pivote::Pivote(Objeto& c){
     this->centro = &c;
-    this->cercanos = new vector<Objeto*>(31);
-    this->reemplazos = new vector<Objeto*>(31);
 }
 
 bool Pivote::operator <(const Pivote& piv) const{
@@ -41,38 +37,27 @@ bool Pivote::operator >(const Pivote& piv) const{
 }
 
 void Pivote::actualizaRadio(){
-    vector<Objeto*>::iterator mayor = cercanos.begin();
-    for(vector<Objeto*>::iterator i = cercanos.begin(); i != cercanos.end(); ++i){
-	if( (*mayor)->distancias.at(pos) < (*i)->distancias.at(pos) )
+    int mayor = 0;
+    for(int i = 0; i < cercanos.size(); i++){
+	if( cercanos[mayor]->distancias[pos] < cercanos[i]->distancias[pos] )
 	    mayor = i;
     }
-    radio = (*mayor)->distancias.at(pos);
-}
-
-void Pivote::actualizaRadio2(){
-    vector<Objeto*>::iterator mayor = reemplazos.begin();
-    for(vector<Objeto*>::iterator i = reemplazos.begin(); i != reemplazos.end(); ++i){
-        if( (*mayor)->distancias.at(pos) < (*i)->distancias.at(pos) )
-            mayor = i;
-    }
-    radio2 = (*mayor)->distancias.at(pos);
+    radio = cercanos[mayor]->distancias[pos];
 }
 
 void Pivote::ordenaCercanos(int pos){
     for(vector<Objeto*>::iterator i = cercanos.begin(); i != cercanos.end(); ++i){
-	(*i)->comparando = pos;
+	   (*i)->comparando = pos;
     }
     sort( cercanos.begin(), cercanos.end());
 }
 
-void Pivote::ordenaReemplazos(int pos, int modo){
-    for(vector<Objeto*>::iterator i = reemplazos.begin(); i != reemplazos.end(); ++i){
-        (*i)->comparando = pos;
+void Pivote::actualizaMasLejano(){
+    int lejano = 0;
+    for( int i = 0; i < cercanos.size(); i++){
+        if( cercanos[i]->distancias[this->pos] >= cercanos[lejano]->distancias[this->pos] ){
+            lejano = i;
+        }
     }
-    if(modo==1)
-        sort( reemplazos.begin(), reemplazos.end());
-    else
-        sort( reemplazos.begin(), reemplazos.end(), Objeto.operator >() );
+    this->posMasLejano = lejano;
 }
-
-

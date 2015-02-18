@@ -16,8 +16,8 @@ public:
     double radio2;
     Objeto *centro;
     int pos;
+    int posMasLejano;
     vector<Objeto*> cercanos;
-    //vector<Objeto*> reemplazos;
     Pivote();
     Pivote(const Pivote& orig);
     Pivote(Objeto &c);
@@ -26,9 +26,8 @@ public:
     bool operator>(const Pivote& piv) const;
     virtual ~Pivote();
     void actualizaRadio();
-    void actualizaRadio2();
     void ordenaCercanos(int pos);
-    void ordenaReemplazos(int pos, int modo);
+    void actualizaMasLejano();
 private:
 
 };
