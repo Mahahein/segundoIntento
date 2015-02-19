@@ -17,6 +17,7 @@ public:
     Objeto *centro;
     int pos;
     int posMasLejano;
+    int numCluster;
     vector<Objeto*> cercanos;
     Pivote();
     Pivote(const Pivote& orig);

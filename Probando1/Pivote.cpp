@@ -11,9 +11,11 @@
 #include <algorithm>
 
 Pivote::Pivote() {
+    numCluster = 0;
 }
 
 Pivote::Pivote(const Pivote& orig) {
+    numCluster = 0;
 }
 
 Pivote::~Pivote() {
@@ -22,10 +24,12 @@ Pivote::~Pivote() {
 Pivote::Pivote(Objeto& ob, double r){
     this->centro = &ob;
     this->radio = r;
+    numCluster = 0;
 }
 
 Pivote::Pivote(Objeto& c){
     this->centro = &c;
+    numCluster = 0;
 }
 
 bool Pivote::operator <(const Pivote& piv) const{
@@ -54,7 +58,9 @@ void Pivote::ordenaCercanos(int pos){
 
 void Pivote::actualizaMasLejano(){
     int lejano = 0;
+    //cout << "EN PIVOTE.CPP ";
     for( int i = 0; i < cercanos.size(); i++){
+        //cout << "cercanos[i]->distancias.size(): " << cercanos[i]->distancias.size() << "  this->pos: " << this->pos << endl;
         if( cercanos[i]->distancias[this->pos] >= cercanos[lejano]->distancias[this->pos] ){
             lejano = i;
         }

@@ -18,8 +18,6 @@ public:
     vector<Objeto*> bolsa;
     vector<Pivote*> pivotesProvisorios;
     vector<Pivote*> pivotesEnMemoria;
-    bool yaHayUno;
-    bool yaHayOtro;
     Saco();
     Saco(const Saco& orig);
     virtual ~Saco();
@@ -27,9 +25,11 @@ public:
     void distanciasAPivotes(Objeto* ob);
     void distanciaPivoteNuevo(Objeto* ob, Pivote* piv);
     void obtieneCercanos(Pivote* p);
-    bool estaEnPivotes(int id);
     double obtieneRadio(vector<Objeto*> & obs, int pos);
     void sacaPivoteDelSaco(int id);
+    void sacaPivoteDeProvisorios(int id);
+    void elegirPivoteProvisorio(int nPivotes);
+    void pasarAMemoria(int nCluster, int* nPivotes);
     //void agregarACercanosDePivotes(Objeto* ob);
     //void eliminarObjetoDeCercanos(int idPiv, int idObj);
 private:
