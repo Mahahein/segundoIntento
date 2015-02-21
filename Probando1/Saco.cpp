@@ -37,7 +37,7 @@ void Saco::leer(string archivo){
     ifstream entrada;
     ofstream pivotesDisco;
     entrada.open("vector.txt");
-    string buf, salida;
+    string buf;
     const char* buf2;
     long cluster = 1;
     int nPivotes = 0;
