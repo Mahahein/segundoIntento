@@ -46,7 +46,10 @@ void Saco::leer(string archivo){
     vector<Objeto*>::iterator i;
     vector<Pivote*>::iterator menor, vi;
     vector<double>::iterator j;
-    ofstream file;
+    
+    string salida = "clusters.bin";
+    file.open(salida.c_str(), ios::out | ios::binary);
+
     for( string linea; getline(entrada, linea);){
         
         stringstream ss(linea);
@@ -91,7 +94,7 @@ void Saco::leer(string archivo){
 
     }
         
-    
+    file.close();
     entrada.close();  
 
 }
@@ -225,7 +228,7 @@ void Saco::elegirPivoteProvisorio(int nPivotes){
 }
 
 void Saco::pasarAMemoria(int nCluster, int* nPivotes){
-    ofstream file;
+    
     int minPiv = 0;
     int k;    
     for( k = 0; k < pivotesProvisorios.size(); k++){
@@ -240,11 +243,6 @@ void Saco::pasarAMemoria(int nCluster, int* nPivotes){
 
     pivotesProvisorios[minPiv]->numCluster = nCluster;
 
-    
-    string salida = "clusters.bin";
-
-    file.open(salida.c_str(), ios::out | ios::binary);
-
     const char* pointer = reinterpret_cast<const char*>(&pivotesProvisorios[minPiv]->centro->valores[0]);
 
     file.write( pointer, sizeof(double)*2 );
@@ -257,7 +255,7 @@ void Saco::pasarAMemoria(int nCluster, int* nPivotes){
         const char* pointer = reinterpret_cast<const char*>(&pivotesProvisorios[minPiv]->cercanos[k]->valores[0]);
         file.write( pointer, sizeof(double)*2 );
     }
-    file.close();
+    
     int pivotesLlevados = 0;
     for( k = 0; k < pivotesProvisorios[minPiv]->cercanos.size(); k++){
         //iter_swap( bolsa.begin() + pivotesProvisorios[minPiv]->cercanos[k]->pos , bolsa.begin() + (bolsa.size() - 1) );

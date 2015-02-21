@@ -9,6 +9,7 @@
 #define	SACO_H
 #include <vector>
 #include <string>
+ #include <fstream>
 #include "Objeto.h"
 #include "Pivote.h"
 using namespace std;
@@ -18,6 +19,7 @@ public:
     vector<Objeto*> bolsa;
     vector<Pivote*> pivotesProvisorios;
     vector<Pivote*> pivotesEnMemoria;
+    ofstream file;
     Saco();
     Saco(const Saco& orig);
     virtual ~Saco();
