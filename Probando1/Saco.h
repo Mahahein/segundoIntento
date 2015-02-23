@@ -32,6 +32,7 @@ public:
     void sacaPivoteDeProvisorios(int id);
     void elegirPivoteProvisorio(int nPivotes);
     void pasarAMemoria(int nCluster, int* nPivotes);
+    void ajustaPosicionesPivotes(int posElim);
     //void agregarACercanosDePivotes(Objeto* ob);
     //void eliminarObjetoDeCercanos(int idPiv, int idObj);
 private:
