@@ -57,7 +57,7 @@ void Saco::leer(string archivo){
         Objeto* ob = new Objeto();
         
         cont = 0;
-        //cout << "leyendo objeto" << endl;
+        cout << "leyendo objeto" << endl;
         while( ss >> buf ){
             //cout << "Hola" << endl;
             //cout << buf << endl;
@@ -81,7 +81,7 @@ void Saco::leer(string archivo){
         if( (bolsa.size()%B) == 1 ){
             cout << "sacando pivote provisorio" << endl;
             elegirPivoteProvisorio(nPivotes);
-            nPivotes++;
+            //nPivotes++;
         }
         //PASAR UN PIVOTE A MEMORIA SECUNDARIA
         if( bolsa.size() == N ){
@@ -226,13 +226,14 @@ void Saco::elegirPivoteProvisorio(int nPivotes){
     for( k = 0; k < bolsa.size(); k++ ){
         distanciaPivoteNuevo(bolsa[k], piv);
     }
-    //cout << "saliendo de elegir pivote" << endl;
+    cout << "saliendo de elegir pivote" << endl;
 }
 
 void Saco::pasarAMemoria(int nCluster, int* nPivotes){
     
     int minPiv = 0;
-    int k;    
+    int k;
+    cout << "buscando el de menor radio de cobertura" << endl;
     for( k = 0; k < pivotesProvisorios.size(); k++){
         //cout << "buscando cercanos" << endl;
         obtieneCercanos(pivotesProvisorios[k]);
@@ -294,7 +295,7 @@ void Saco::pasarAMemoria(int nCluster, int* nPivotes){
                 sacaPivoteDeProvisorios( aux->cercanos[k]->id );
                 elegirPivoteProvisorio(*nPivotes);
                 //cout << *nPivotes << endl;
-                *nPivotes += 1;
+                //*nPivotes += 1;
                 //cout << *nPivotes << endl;
             }
         }
