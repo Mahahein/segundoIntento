@@ -11,11 +11,11 @@
 #include <algorithm>
 
 Pivote::Pivote() {
-    numCluster = 0;
+    numCluster = -1;
 }
 
 Pivote::Pivote(const Pivote& orig) {
-    numCluster = 0;
+    numCluster = -1;
 }
 
 Pivote::~Pivote() {
@@ -24,12 +24,12 @@ Pivote::~Pivote() {
 Pivote::Pivote(Objeto& ob, double r){
     this->centro = &ob;
     this->radio = r;
-    numCluster = 0;
+    numCluster = -1;
 }
 
 Pivote::Pivote(Objeto& c){
     this->centro = &c;
-    numCluster = 0;
+    numCluster = -1;
 }
 
 bool Pivote::operator <(const Pivote& piv) const{

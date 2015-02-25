@@ -39,7 +39,7 @@ void Saco::leer(string archivo){
     entrada.open("vector.txt");
     string buf;
     const char* buf2;
-    long cluster = 1;
+    long cluster = 0;
     int nPivotes = 0;
     char* end;
     int cont, mayObj, k, l, minPiv, objs;

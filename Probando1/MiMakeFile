@@ -2,8 +2,8 @@ CPPFLAGS=-std=c++0x
 
 all: prueba
 
-prueba : main.o Objeto.o Pivote.o Bloque.o Nodo.o Saco.o
-	g++ $(CPPFLAGS) main.o Objeto.o Pivote.o Bloque.o Nodo.o Saco.o -o prueba
+prueba : main.o Objeto.o Pivote.o Bloque.o Nodo.o Saco.o Consultor.o
+	g++ $(CPPFLAGS) main.o Objeto.o Pivote.o Bloque.o Nodo.o Saco.o Consultor.o -o prueba
 
 main.o: main.cpp
 	g++ $(CPPFLAGS) -c main.cpp
@@ -22,6 +22,9 @@ Nodo.o: Nodo.cpp
 
 Saco.o: Saco.cpp
 	g++ $(CPPFLAGS) -c Saco.cpp
+
+Consultor.o: Consultor.cpp
+	g++ $(CPPFLAGS) -c Consultor.cpp
 
 clean:
 	rm -rf *o prueba

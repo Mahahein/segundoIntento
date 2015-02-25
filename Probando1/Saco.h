@@ -9,7 +9,7 @@
 #define	SACO_H
 #include <vector>
 #include <string>
- #include <fstream>
+#include <fstream>
 #include "Objeto.h"
 #include "Pivote.h"
 using namespace std;
