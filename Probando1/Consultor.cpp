@@ -27,6 +27,7 @@ vector<Objeto*> Consultor::consultar(Objeto* ob, double r){
 	vector<Pivote*> candidatos;
 	int i, j, k;
 	double dist;
+	bool esta;
 	for( i = 0; i < clusters.size(); i++ ){
 		dist = 0;
 		for( j = 0; j < clusters[i]->centro->valores.size(); j++ )
@@ -73,16 +74,23 @@ vector<Objeto*> Consultor::consultar(Objeto* ob, double r){
 			else{
 				//EN RAM
 				for( j = 0; j < candidatos[i]->cercanos.size(); j++ ){
-					dist = 0;
-					for( k = 0; k < candidatos[i]->cercanos[j]->valores.size(); k++ ){
-						dist += pow( candidatos[i]->cercanos[j]->valores[k] + ob->valores[k], 2 );
+					esta = false;
+					for( k = 0; k < cercanos.size(); k++ ){
+						if( candidatos[i]->cercanos[j]->id == cercanos[k]->id ){
+							esta = true;
+						}
 					}
-					dist = sqrt( dist );
-					if( dist <= r ){
-						cercanos.push_back( candidatos[i]->cercanos[j] );
+					if( !esta ){
+						dist = 0;
+						for( k = 0; k < candidatos[i]->cercanos[j]->valores.size(); k++ ){
+							dist += pow( candidatos[i]->cercanos[j]->valores[k] + ob->valores[k], 2 );
+						}
+						dist = sqrt( dist );
+						if( dist <= r ){
+							cercanos.push_back( candidatos[i]->cercanos[j] );
+						}
 					}
 				}
-				
 			}
 		}
 	}
