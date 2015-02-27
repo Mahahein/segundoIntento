@@ -82,7 +82,7 @@ vector<Objeto*> Consultor::consultar(Objeto* ob, double r){
 						cercanos.push_back( candidatos[i]->cercanos[j] );
 					}
 				}
-
+				
 			}
 		}
 	}
