@@ -7,6 +7,7 @@
 
 #ifndef CARGADOR_H
 #define	CARGADOR_H
+#include <set>
 #include <vector>
 #include <string>
 #include <fstream>
@@ -25,14 +26,15 @@ public:
     virtual ~Cargador();
     void leer(string archivo);
     void distanciasAPivotes(Objeto* ob);
-    void distanciaPivoteNuevo(Objeto* ob, Pivote* piv);
+    double distanciaPivoteNuevo(Objeto* ob, Pivote* piv);
     void obtieneCercanos(Pivote* p);
-    double obtieneRadio(vector<Objeto*> & obs, int pos);
+    //double obtieneRadio(set<Objeto*> & obs, int pos);
     void sacaPivoteDelSaco(int id);
     void sacaPivoteDeProvisorios(int id);
     void elegirPivoteProvisorio(int nPivotes);
     void pasarAMemoria(int nCluster, int* nPivotes);
     void ajustaPosicionesPivotes(int posElim);
+    void ajustaPosiciones();
     //void agregarACercanosDePivotes(Objeto* ob);
     //void eliminarObjetoDeCercanos(int idPiv, int idObj);
 private:

@@ -4,6 +4,7 @@
 #include "Lector.h"
 #include "Objeto.h"
 #include <vector>
+#include <set>
 #include <string>
 #include <stdio.h>
 

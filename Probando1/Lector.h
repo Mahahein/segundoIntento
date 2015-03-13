@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Objeto.h"
 #include <vector>
+#include <set>
 #include <string>
 
 using namespace std;

@@ -16,6 +16,7 @@ public:
     vector<double> valores;
     vector<double> distancias;
     double distanciaAcumulada;
+    double distanciaACentro;
     int id;
     int comparando;
     int pos;
@@ -25,10 +26,11 @@ public:
     Objeto(int pezo);
     virtual ~Objeto();
     void poneValor(double val);
+    void poneDistancia(double d);
     void aumentaAcumulado(double k);
-    bool operator<(const Objeto& ob) const;
-    bool operator>(const Objeto& ob) const;
-    bool operator==(const Objeto& ob) const;
+    //bool operator<(const Objeto& ob) const;
+    //bool operator>(const Objeto& ob) const;
+    //bool operator==(const Objeto& ob) const;
     ostream& operator << (ostream& out);
     Objeto newObjeto();
 private:

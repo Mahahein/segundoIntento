@@ -37,11 +37,15 @@ void Objeto::poneValor(double val){
     valores.push_back(val);
 }
 
+void Objeto::poneDistancia(double d){
+    distancias.push_back(d);
+}
+
 void Objeto::aumentaAcumulado(double k){
     distanciaAcumulada += k;
 }
 
-bool Objeto::operator <(const Objeto& ob) const{
+/*bool Objeto::operator <(const Objeto& ob) const{
     return (distancias.at(comparando) < ob.distancias.at(comparando));
 }
 
@@ -51,7 +55,7 @@ bool Objeto::operator >(const Objeto& ob) const{
 
 bool Objeto::operator ==(const Objeto& ob) const{
     return (id == ob.id);
-}
+}*/
 
 ostream& Objeto::operator <<(ostream& out){
     for(int i = 0; i < valores.size(); i++){

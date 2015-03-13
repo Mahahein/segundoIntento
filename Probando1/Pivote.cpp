@@ -8,7 +8,9 @@
 #include "Pivote.h"
 #include "Objeto.h"
 #include <vector>
+#include <set>
 #include <algorithm>
+#include <math.h>
 
 Pivote::Pivote() {
     numCluster = -1;
@@ -33,35 +35,53 @@ Pivote::Pivote(Objeto& c){
 }
 
 bool Pivote::operator <(const Pivote& piv) const{
-    return (radio < piv.radio);
+    return (numCluster < piv.numCluster);
 }
 
 bool Pivote::operator >(const Pivote& piv) const{
-    return (radio > piv.radio);
+    return (numCluster > piv.numCluster);
 }
 
 void Pivote::actualizaRadio(){
     int mayor = 0;
-    for(int i = 0; i < cercanos.size(); i++){
-	if( cercanos[mayor]->distancias[pos] < cercanos[i]->distancias[pos] )
-	    mayor = i;
+    vector<Objeto*>::iterator itMay = cercanos.begin();
+    for( vector<Objeto*>::iterator i = cercanos.begin(); i != cercanos.end(); ++i ){
+    	if( (*itMay)->distancias[pos] < (*i)->distancias[pos] )
+    	    itMay = i;
     }
-    radio = cercanos[mayor]->distancias[pos];
+    radio = (*itMay)->distancias[pos];
+}
+
+void Pivote::actualizaRadioCentro(){
+    int mayor = 0;
+    double dist;
+    vector<Objeto*>::iterator itMay = cercanos.begin();
+    for( vector<Objeto*>::iterator i = cercanos.begin(); i != cercanos.end(); ++i ){
+        for(int j = 0; j < (*i)->valores.size(); j++ )
+            dist += pow( centro->valores[j] + (*i)->valores[j] , 2 );
+        dist = sqrt( dist );
+        (*i)->distanciaACentro = dist;
+    }
+    for( vector<Objeto*>::iterator i = cercanos.begin(); i != cercanos.end(); ++i){
+        if( (*itMay)->distanciaACentro < (*i)->distanciaACentro )
+            itMay = i;
+    }
+    radio = (*itMay)->distanciaACentro;
 }
 
 void Pivote::ordenaCercanos(int pos){
     for(vector<Objeto*>::iterator i = cercanos.begin(); i != cercanos.end(); ++i){
 	   (*i)->comparando = pos;
     }
-    sort( cercanos.begin(), cercanos.end());
+    //sort( cercanos.begin(), cercanos.end());
 }
 
 void Pivote::actualizaMasLejano(){
-    int lejano = 0;
+    vector<Objeto*>::iterator lejano = cercanos.begin();
     //cout << "EN PIVOTE.CPP ";
-    for( int i = 0; i < cercanos.size(); i++){
+    for( vector<Objeto*>::iterator i = cercanos.begin(); i != cercanos.end(); ++i ){
         //cout << "cercanos[i]->distancias.size(): " << cercanos[i]->distancias.size() << "  this->pos: " << this->pos << endl;
-        if( cercanos[i]->distancias[this->pos] >= cercanos[lejano]->distancias[this->pos] ){
+        if( (*i)->distancias[this->pos] >= (*lejano)->distancias[this->pos] ){
             lejano = i;
         }
     }

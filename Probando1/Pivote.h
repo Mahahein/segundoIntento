@@ -8,7 +8,7 @@
 #ifndef PIVOTE_H
 #define	PIVOTE_H
 #include "Objeto.h"
-#include <vector>
+#include <set>
 
 class Pivote {
 public:
@@ -16,7 +16,7 @@ public:
     double radio2;
     Objeto *centro;
     int pos;
-    int posMasLejano;
+    vector<Objeto*>::iterator posMasLejano;
     int numCluster;
     vector<Objeto*> cercanos;
     Pivote();
@@ -27,6 +27,7 @@ public:
     bool operator>(const Pivote& piv) const;
     virtual ~Pivote();
     void actualizaRadio();
+    void actualizaRadioCentro();
     void ordenaCercanos(int pos);
     void actualizaMasLejano();
 private:
